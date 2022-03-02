@@ -6,7 +6,7 @@ import "./home.css"
 const HomeView = ()=>{
     const [data, setData] = useState([]);
     const [users, setUsers] = useState([]);
-    const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState("");
     
     const updateData = useCallback(()=>{
         if(currentUser != null){
@@ -14,17 +14,18 @@ const HomeView = ()=>{
             .then(res => res.json())
             .then(
               (result) => {
-                result.sort((a,b)=>{
-                    return a.timestamp.$date - b.timestamp.$date;
-                })
-                setData(result)
+                if (result){
+                    result.sort((a,b)=>{
+                        return a.timestamp.$date - b.timestamp.$date;
+                    })
+                    setData(result)
+                }
               },
             )
         }
     },[currentUser]);
 
     useEffect(()=>{
-        console.log(`${process.env.REACT_APP_API_URL}/users`)
         fetch(`${process.env.REACT_APP_API_URL}/users`)
         .then(res=>res.json())
         .then(
@@ -89,7 +90,7 @@ const HomeView = ()=>{
                         value={currentUser}
                         onChange={e=>setCurrentUser(e.target.value)}>
                         
-                        <option key="NULL" value={null}></option>
+                        <option key="empty" value=""></option>
                         {users.map((user, idx)=>{
                             return (
                                 <option key={idx} value={user._id.$oid}>{user.username}</option>
