@@ -10,7 +10,7 @@ const HomeView = ()=>{
     
     const updateData = useCallback(()=>{
         if(currentUser != null){
-            fetch(`http://localhost:5000/vitals?user=${currentUser}`)
+            fetch(`${process.env.REACT_APP_API_URL}/vitals?user=${currentUser}`)
             .then(res => res.json())
             .then(
               (result) => {
@@ -24,7 +24,8 @@ const HomeView = ()=>{
     },[currentUser]);
 
     useEffect(()=>{
-        fetch("http://localhost:5000/users")
+        console.log(`${process.env.REACT_APP_API_URL}/users`)
+        fetch(`${process.env.REACT_APP_API_URL}/users`)
         .then(res=>res.json())
         .then(
             (result)=>{
